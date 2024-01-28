@@ -16,10 +16,10 @@ const MenuProps = {
     },
 };
 
-function getStyles(name, personName, theme) {
+function getStyles(name, selectedValue, theme) {
     return {
         fontWeight:
-            personName.indexOf(name) === -1
+        selectedValue.indexOf(name) === -1
                 ? theme.typography.fontWeightRegular
                 : theme.typography.fontWeightMedium,
     };
@@ -28,13 +28,13 @@ function getStyles(name, personName, theme) {
 export default function CustomDropdown(props) {
     const names = props.names;
     const theme = useTheme();
-    const [personName, setPersonName] = React.useState([]);
+    const [selectedValue, setSelectedValue] = React.useState([]);
 
     const handleChange = (event) => {
         const {
             target: { value },
         } = event;
-        setPersonName(
+        setSelectedValue(
             // On autofill we get a stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
@@ -44,9 +44,8 @@ export default function CustomDropdown(props) {
         <div>
             <FormControl sx={{ m: 1, width: 200 }}>
                 <Select
-                    multiple
                     displayEmpty
-                    value={personName}
+                    value={selectedValue}
                     onChange={handleChange}
                     input={<OutlinedInput />}
                     renderValue={(selected) => {
@@ -58,6 +57,11 @@ export default function CustomDropdown(props) {
                     }}
                     MenuProps={MenuProps}
                     inputProps={{ 'aria-label': 'Without label' }}
+                    sx={{
+                        ".MuiSelect-select":{
+                            padding: "10px"
+                        }
+                    }}
                 >
                     <MenuItem disabled value="">
                         <em>{props.placeholder}</em>
@@ -66,7 +70,7 @@ export default function CustomDropdown(props) {
                         <MenuItem
                             key={name}
                             value={name}
-                            style={getStyles(name, personName, theme)}
+                            style={getStyles(name, selectedValue, theme)}
                         >
                             {name}
                         </MenuItem>

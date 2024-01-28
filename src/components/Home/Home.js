@@ -1,12 +1,13 @@
 import React from "react";
-import { Card, CardContent } from "@mui/material";
+import { Card, CardContent, Toolbar } from "@mui/material";
 import CustomDropdown from "../Dropdown/CustomDropdown";
 import ReactTable from "../ReactTable/ReactTable";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { useState } from "react";
 import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Header from "../Header/Header";
+import { defaultDatePickerSlotPropsStyles, defaultDatePickerStyles } from "../../Utils";
+import Footer from "../Footer/Footer";
 
 const columns = [
     {
@@ -282,56 +283,88 @@ const testingDropdown = [
     "Regression",
 ];
 
-const Home = () => {
+const Home = (props) => {
+    // eslint-disable-next-line
     const [startDate, setStartDate] = React.useState(dayjs('2022-04-17'));
 
     return (
-        <>
-            <Header />
-            <Card>
-                <CardContent sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    alignItems: "center"
+        <div style={{
+            minHeight: "100%",
+            position: "relative"
+        }}>
+            <Toolbar sx={{
+                minHeight: "48px !important",
+            }} />
+            <Header setIsLoggedIn={props.setIsLoggedIn} />
+            {/* Content */}
+            <div style={{
+                paddingBottom: "100px",
+            }}>
+                <Card sx={{
+                    margin: "10px"
                 }}>
-                    <CustomDropdown
-                        placeholder="Select Project"
-                        names={projectDropdown}
-                    />
-                    <CustomDropdown
-                        placeholder="Select Release"
-                        names={releaseDropdown}
-                    />
-                    <CustomDropdown
-                        placeholder="Select Testing"
-                        names={testingDropdown}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            label="Start Date"
-                            value={startDate}
-                        // onChange={(newValue) => setValue(newValue)}
+                    <CardContent sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                        padding: "10px",
+                        ":last-child": {
+                            paddingBottom: "10px !important",
+                        }
+                    }}>
+                        <CustomDropdown
+                            placeholder="Select Project"
+                            names={projectDropdown}
+                        />
+                        <CustomDropdown
+                            placeholder="Select Release"
+                            names={releaseDropdown}
+                        />
+                        <CustomDropdown
+                            placeholder="Select Testing"
+                            names={testingDropdown}
+                        />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Start Date"
+                                value={startDate}
+                                // onChange={(newValue) => setValue(newValue)}
+                                sx={defaultDatePickerStyles}
+                                slotProps={defaultDatePickerSlotPropsStyles}
+                            />
+                            <DatePicker
+                                label="End Date"
+                                value={startDate}
+                                // onChange={(newValue) => setValue(newValue)}
+                                sx={defaultDatePickerStyles}
+                                slotProps={defaultDatePickerSlotPropsStyles}
+                            />
+                        </LocalizationProvider>
+                    </CardContent>
+                </Card>
+                <Card
+                    sx={{
+                        margin: "10px"
+                    }}
+                >
+                    <CardContent
                         sx={{
-                            ".MuiFormControl-root":{
-                                width: "200px"
+                            padding: "0",
+                            ":last-child": {
+                                paddingBottom: "0 !important",
                             }
                         }}
+                    >
+                        <ReactTable
+                            columns={columns}
+                            data={data}
                         />
-                        <DatePicker
-                            label="End Date"
-                            value={startDate}
-                        // onChange={(newValue) => setValue(newValue)}
-                        />
-                    </LocalizationProvider>
-                </CardContent>
-            </Card>
-            <div>
-                <ReactTable
-                    columns={columns}
-                    data={data}
-                />
+                    </CardContent>
+                </Card>
             </div>
-        </>
+            {/* Footer */}
+            <Footer />
+        </div>
     )
 };
 

@@ -99,7 +99,7 @@ export default function ReactTable(props) {
                   align={column.align ? column.align : "center"}
                   style={{ minWidth: column.minWidth }}
                   sx={{
-                    padding: "10px",
+                    padding: "7px",
                     color: "white",
                     backgroundColor: "#6363b2",
                     border: "1px solid rgba(224, 224, 224, 1)",
@@ -124,7 +124,7 @@ export default function ReactTable(props) {
                           key={index2}
                           align={column.cellAlign ? column.cellAlign : "left"}
                           sx={{
-                            padding: "10px",
+                            padding: "5px",
                             border: "1px solid rgba(224, 224, 224, 1)",
                           }}
                         >
