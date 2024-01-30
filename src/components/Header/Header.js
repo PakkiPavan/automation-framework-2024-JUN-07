@@ -1,4 +1,5 @@
 import * as React from 'react';
+import "./Header.css";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,8 +17,7 @@ import Button from '@mui/material/Button';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
-const logo = "LOGO";
+const navItems = ['Home', 'About', 'Contact']
 
 function Header(props) {
   const { window } = props;
@@ -30,7 +30,7 @@ function Header(props) {
   const renderLogoutButton = (buttonTextColor) => {
     return (
       <Button
-        sx={{ color: buttonTextColor ? buttonTextColor : "#fff" }}
+        sx={{ color: buttonTextColor ? buttonTextColor : "black" }}
         onClick={()=>props.setIsLoggedIn(false)}
       >
         <LogoutIcon />Logout
@@ -41,7 +41,7 @@ function Header(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        {logo}
+        <img src="ocbc.png" />
       </Typography>
       <Divider />
       <List>
@@ -64,7 +64,7 @@ function Header(props) {
       <AppBar
         component="nav"
         sx={{
-          backgroundColor: "#6363b2",
+          backgroundColor: "white",
           ".MuiToolbar-root": {
             minHeight: "45px"
           }
@@ -85,11 +85,11 @@ function Header(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            {logo}
+            <img src="/ocbc.png" />
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+              <Button key={item} sx={{ color: 'black' }}>
                 {item}
               </Button>
             ))}

@@ -101,7 +101,7 @@ export default function ReactTable(props) {
                   sx={{
                     padding: "7px",
                     color: "white",
-                    backgroundColor: "#6363b2",
+                    backgroundColor: "#cb2d3e",
                     border: "1px solid rgba(224, 224, 224, 1)",
                     width: column.width ? column.width : null 
                   }}

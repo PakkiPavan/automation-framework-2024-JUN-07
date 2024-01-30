@@ -263,12 +263,12 @@ const data = [
 
 ];
 
-const projectDropdown = [
-    "Project1",
-    "Project2",
-    "Project3",
-    "Project4",
-];
+// const projectDropdown = [
+//     "Project1",
+//     "Project2",
+//     "Project3",
+//     "Project4",
+// ];
 
 const releaseDropdown = [
     "Release1",
@@ -286,6 +286,23 @@ const testingDropdown = [
 const Home = (props) => {
     // eslint-disable-next-line
     const [startDate, setStartDate] = React.useState(dayjs('2022-04-17'));
+    const [projectDropdown, setProjectDropdown] = React.useState([]);
+
+    React.useEffect(() => {
+        const dropdownAPIURL = "";
+        fetch(dropdownAPIURL)
+            .then(res => res.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                if (jsonData) {
+                    const projectDropdownData = jsonData.map((json) => json.description);
+                    setProjectDropdown(projectDropdownData);
+                }
+            })
+            .catch(err => {
+                console.log("Error while fetching dropdown:", err);
+            })
+    })
 
     return (
         <div style={{

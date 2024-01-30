@@ -81,8 +81,18 @@ export default function Login(props) {
                 justifyContent: "center",
                 alignItems: "center",
                 height: "100vh",
-                background: "linear-gradient(-135deg,#c850c0,#4158d0)"
+                // background: "linear-gradient(-135deg,#c850c0,#4158d0)"
+                backgroundImage: 'url("/ocbc-bg.jpg")',
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundAttachment: "fixed",
             }}>
+                <h1 style={{
+                    position: "absolute",
+                    top: 0,
+                    fontSize: "28px",
+                    fontWeight: "300"
+                }}>Welcome to OCBC</h1>
                 <Card sx={{
                     width: "400px"
                 }}>
@@ -106,8 +116,8 @@ export default function Login(props) {
                                 value={userName}
                                 onChange={(event) => setUserName(event.target.value)}
                                 sx={defaultTextfieldStyles}
-                                onKeyDown={(event)=>{
-                                    if(event.key === "Enter"){
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter") {
                                         handleLogin();
                                     }
                                 }}
@@ -121,8 +131,8 @@ export default function Login(props) {
                                 value={password}
                                 onChange={(event) => setPassword(event.target.value)}
                                 sx={defaultTextfieldStyles}
-                                onKeyDown={(event)=>{
-                                    if(event.key === "Enter"){
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter") {
                                         handleLogin();
                                     }
                                 }}
@@ -138,7 +148,7 @@ export default function Login(props) {
                         </div>
                     </CardContent>
                 </Card>
-            </div>
+            </div >
         </>
     )
 } 

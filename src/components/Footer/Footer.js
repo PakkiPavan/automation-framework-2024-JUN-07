@@ -4,12 +4,12 @@ export default function Footer() {
     return (
         <>
             <Card sx={{
-                backgroundColor: "#000",
+                backgroundColor: "grey",
                 color: "#fff",
                 borderRadius: "0",
                 marginTop: "auto",
-                position: "absolute",
-                // bottom: "0",
+                position: "fixed",
+                bottom: "0",
                 left: "0",
                 height: "100px",
                 width: "100%"
