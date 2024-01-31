@@ -30,3 +30,13 @@ export const defaultTextfieldStyles = {
         top: "0"
     }
 };
+
+export const getFormattedDate = (date) => {
+    let currentDate = new Date(date.split("T")[0]);
+    let months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    let day = currentDate.getDate();
+    let month = months[currentDate.getMonth()];
+    let year = currentDate.getFullYear();
+    let formattedDate = `${day} ${month} ${year}`;
+    return formattedDate;
+}

@@ -74,6 +74,7 @@ export default function ReactTable(props) {
   const rows = props.data;
   const columns = props.columns;
 
+  const [tableData, setTableData] = React.useState(rows);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -86,14 +87,51 @@ export default function ReactTable(props) {
     setPage(0);
   };
 
+  const handleSearch = (searchValue) => {
+    if (!searchValue || searchValue.trim() === "") {
+      setTableData(rows);
+    }
+    else {
+      const caseValue = searchValue.toLowerCase();
+      const filteredData = [];
+      rows.forEach((obj) => {
+        for (let key in obj) {
+          if (typeof obj[key] === "string") {
+            if (obj[key].toLowerCase().includes(caseValue)) {
+              filteredData.push(obj);
+              break;
+            }
+          }
+          else {
+            if (obj[key].props && obj[key].props.children.toLowerCase().includes(caseValue)) {
+              filteredData.push(obj);
+              break;
+            }
+          }
+
+        }
+      });
+      console.log("filteredData", filteredData)
+      setTableData(filteredData);
+    }
+  }
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <input
+        placeholder='Search...'
+        onChange={(event) => handleSearch(event.target.value)}
+        style={{
+          padding: "8px",
+          margin: "10px"
+        }}
+      />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow
             >
-              {columns.map((column,index) => (
+              {columns.map((column, index) => (
                 <TableCell
                   key={index}
                   align={column.align ? column.align : "center"}
@@ -103,7 +141,7 @@ export default function ReactTable(props) {
                     color: "white",
                     backgroundColor: "#cb2d3e",
                     border: "1px solid rgba(224, 224, 224, 1)",
-                    width: column.width ? column.width : null 
+                    width: column.width ? column.width : null
                   }}
                 >
                   {column.label}
@@ -112,12 +150,12 @@ export default function ReactTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {tableData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row,index1) => {
+              .map((row, index1) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={index1}>
-                    {columns.map((column,index2) => {
+                    {columns.map((column, index2) => {
                       const value = row[column.id];
                       return (
                         <TableCell
@@ -137,13 +175,28 @@ export default function ReactTable(props) {
                   </TableRow>
                 );
               })}
+            {
+              tableData.length === 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    sx={{
+                      textAlign: "center",
+                      height: "18rem",
+                    }}
+                  >
+                    No Data Found
+                  </TableCell>
+                </TableRow>
+              )
+            }
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={tableData.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
