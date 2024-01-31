@@ -17,7 +17,7 @@ const columns = [
         cellAlign: "center",
     },
     {
-        id: "testCaseId",
+        id: "test_case_id",
         label: "Test Case ID",
         width: "10%",
         cellAlign: "center",
@@ -28,240 +28,38 @@ const columns = [
         cellAlign: "center",
     },
     {
-        id: "status",
+        id: "failureReason",
+        label: "Failure Reason",
+        cellAlign: "center",
+    },
+    {
+        id: "execution_status",
         label: "Status",
-        width: "20%",
+        width: "10%",
+        cellAlign: "center",
+    },
+    {
+        id: "execution_date",
+        label: "Execution Date",
+        width: "10%",
         cellAlign: "center",
     },
 ];
-const data = [
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-    {
-        project: "Project1",
-        testCaseId: "TC001",
-        description: "Some Test Case Description Some Test Case Description",
-        status: "Running"
-    },
-
-
-];
+const generateSampleTestCaseData = () => {
+    const testCaseData = [];
+    for (let i = 0; i < 30; i++) {
+        testCaseData.push({
+            project: "Project1",
+            test_case_id: `ETE-${1000 + i}`,
+            description: "Some Test Case Description Some Test Case Description",
+            failureReason: "SessionNotCreatedException",
+            execution_status: "PASSED",
+            execution_date: "2023-11-01",
+        });
+    }
+    return testCaseData;
+}
+const sampleTestCaseData = generateSampleTestCaseData();
 
 // const projectDropdown = [
 //     "Project1",
@@ -287,6 +85,7 @@ const Home = (props) => {
     // eslint-disable-next-line
     const [startDate, setStartDate] = React.useState(dayjs('2022-04-17'));
     const [projectDropdown, setProjectDropdown] = React.useState([]);
+    const [testCaseData, setTestCaseData] = React.useState(sampleTestCaseData);
 
     React.useEffect(() => {
         const dropdownAPIURL = "";
@@ -301,6 +100,31 @@ const Home = (props) => {
             })
             .catch(err => {
                 console.log("Error while fetching dropdown:", err);
+            })
+
+        const testCaseAPIURL="";
+        fetch(testCaseAPIURL)
+            .then(res => res.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                if (jsonData) {
+                    const testCaseData=[];
+                    jsonData.forEach((testCase)=>{
+                        testCaseData.push({
+                            project: testCase.project.description,
+                            test_case_id: testCase.test_case_id,
+                            description: testCase.description,
+                            failureReason: testCase.failureReason.name,
+                            execution_status: testCase.execution_status,
+                            execution_date: testCase.execution_date,
+                        })
+                    })
+
+                    setTestCaseData(testCaseData);
+                }
+            })
+            .catch(err => {
+                console.log("Error while fetching test case date:", err);
             })
     })
 
@@ -374,7 +198,7 @@ const Home = (props) => {
                     >
                         <ReactTable
                             columns={columns}
-                            data={data}
+                            data={testCaseData}
                         />
                     </CardContent>
                 </Card>

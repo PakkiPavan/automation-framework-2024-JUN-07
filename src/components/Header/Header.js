@@ -31,7 +31,7 @@ function Header(props) {
     return (
       <Button
         sx={{ color: buttonTextColor ? buttonTextColor : "black" }}
-        onClick={()=>props.setIsLoggedIn(false)}
+        onClick={() => props.setIsLoggedIn(false)}
       >
         <LogoutIcon />Logout
       </Button>
@@ -41,7 +41,7 @@ function Header(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        <img src="ocbc.png" />
+        <img src="ocbc.png" alt="OCBC LOGO" />
       </Typography>
       <Divider />
       <List>
@@ -76,7 +76,7 @@ function Header(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: 'none' }, color: "black" }}
           >
             <MenuIcon />
           </IconButton>
@@ -85,7 +85,7 @@ function Header(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            <img src="/ocbc.png" />
+            <img src="/ocbc.png" alt="OCBC LOGO" />
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
