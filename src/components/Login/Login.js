@@ -83,7 +83,7 @@ export default function Login(props) {
                 alignItems: "center",
                 height: "100vh",
                 // background: "linear-gradient(-135deg,#c850c0,#4158d0)"
-                backgroundImage: 'url("/ocbc-bg.jpg")',
+                backgroundImage: 'url("/bg.jpg")',
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
                 backgroundAttachment: "fixed",
@@ -93,7 +93,7 @@ export default function Login(props) {
                     top: 0,
                     fontSize: "28px",
                     fontWeight: "300"
-                }}>Welcome to OCBC</h1>
+                }}>Welcome to NAME</h1>
                 <Card sx={{
                     width: "400px"
                 }}>

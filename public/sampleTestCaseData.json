@@ -3,7 +3,7 @@
         "project": {
             "description": "Project1"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -15,7 +15,7 @@
         "project": {
             "description": "Project1"
         },
-        "testCaseId": "ETE-10002",
+        "testCaseId": "10002",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -27,7 +27,7 @@
         "project": {
             "description": "Project1"
         },
-        "testCaseId": "ETE-10003",
+        "testCaseId": "10003",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -39,7 +39,7 @@
         "project": {
             "description": "Project1"
         },
-        "testCaseId": "ETE-10004",
+        "testCaseId": "10004",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -51,7 +51,7 @@
         "project": {
             "description": "Project2"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -63,7 +63,7 @@
         "project": {
             "description": "Project1"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -75,7 +75,7 @@
         "project": {
             "description": "Project2"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -87,7 +87,7 @@
         "project": {
             "description": "Project1"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -99,7 +99,7 @@
         "project": {
             "description": "Project1"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -111,7 +111,7 @@
         "project": {
             "description": "Project3"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
@@ -123,7 +123,7 @@
         "project": {
             "description": "Project4"
         },
-        "testCaseId": "ETE-10001",
+        "testCaseId": "10001",
         "description": "Some Test Case Description Some Test Case Description",
         "failureReason": {
             "name": "SessionNotCreatedException"
