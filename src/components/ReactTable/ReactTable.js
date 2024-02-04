@@ -13,7 +13,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { useTheme } from '@emotion/react';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -78,6 +78,10 @@ export default function ReactTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  React.useEffect(() => {
+    setTableData(props.data);
+  }, [props.data])
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -103,7 +107,20 @@ export default function ReactTable(props) {
             }
           }
           else {
-            if (obj[key].props && obj[key].props.children.toLowerCase().includes(caseValue)) {
+            if (
+              obj[key].props &&
+              typeof obj[key].props.children === "string" &&
+              obj[key].props.children.toLowerCase().includes(caseValue)
+            ) {
+              filteredData.push(obj);
+              break;
+            }
+            else if (
+              obj[key].props &&
+              typeof obj[key].props.children === "object" &&
+              typeof obj[key].props.children[0] === "string" &&
+              obj[key].props.children[0].toLowerCase().includes(caseValue)
+            ) {
               filteredData.push(obj);
               break;
             }
@@ -141,7 +158,7 @@ export default function ReactTable(props) {
                     color: "white",
                     backgroundColor: "#cb2d3e",
                     border: "1px solid rgba(224, 224, 224, 1)",
-                    width: column.width ? column.width : null
+                    ...(column.headerStyles ? column.headerStyles : {})
                   }}
                 >
                   {column.label}
@@ -164,11 +181,12 @@ export default function ReactTable(props) {
                           sx={{
                             padding: "5px",
                             border: "1px solid rgba(224, 224, 224, 1)",
+                            ...(column.cellStyles ? column.cellStyles : {})
                           }}
                         >
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                          <Tooltip title={value}>
+                            {value}
+                          </Tooltip>
                         </TableCell>
                       );
                     })}

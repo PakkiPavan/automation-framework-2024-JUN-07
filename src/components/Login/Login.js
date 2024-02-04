@@ -40,6 +40,7 @@ export default function Login(props) {
             return;
         }
 
+        sessionStorage.setItem("userName",userName);
         props.setIsLoggedIn(true);
     };
 

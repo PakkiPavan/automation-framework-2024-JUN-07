@@ -31,12 +31,36 @@ export const defaultTextfieldStyles = {
     }
 };
 
-export const getFormattedDate = (date) => {
-    let currentDate = new Date(date.split("T")[0]);
-    let months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-    let day = currentDate.getDate();
-    let month = months[currentDate.getMonth()];
-    let year = currentDate.getFullYear();
-    let formattedDate = `${day} ${month} ${year}`;
+export const getFormattedDate = (inputDateString) => {
+    const inputDate = new Date(inputDateString);
+
+    const options = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+    };
+
+    const formattedDate = inputDate.toLocaleString('en-US', options);
+
     return formattedDate;
+}
+
+export const getFormattedDayJsDate = (dayJsDate) => {
+    const year = dayJsDate.year();
+    const month = String(dayJsDate.month() + 1).padStart(2, '0');
+    const date = String(dayJsDate.date()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${date}`;
+
+    return formattedDate;
+};
+
+export const overflowStyles = {
+    textOverflow: "ellipsis",
+    maxWidth: "200px",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
 }

@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div>
-      {isLoggedIn ? <Home setIsLoggedIn={setIsLoggedIn} /> : <Login setIsLoggedIn={setIsLoggedIn} />}
+      {isLoggedIn || sessionStorage.getItem("userName") ? <Home setIsLoggedIn={setIsLoggedIn} /> : <Login setIsLoggedIn={setIsLoggedIn} />}
     </div>
   );
 }

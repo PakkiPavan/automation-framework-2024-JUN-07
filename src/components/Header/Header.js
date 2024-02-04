@@ -31,7 +31,10 @@ function Header(props) {
     return (
       <Button
         sx={{ color: buttonTextColor ? buttonTextColor : "black" }}
-        onClick={() => props.setIsLoggedIn(false)}
+        onClick={() => {
+          props.setIsLoggedIn(false);
+          sessionStorage.clear();
+        }}
       >
         <LogoutIcon />Logout
       </Button>

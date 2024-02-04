@@ -48,6 +48,7 @@ export default function CustomDropdown(props) {
                 disablePortal
                 options={names}
                 size="small"
+                defaultValue={props.defaultValue}
                 value={selectedValue}
                 onChange={(event, option) => {
                     props.onChange(option);
