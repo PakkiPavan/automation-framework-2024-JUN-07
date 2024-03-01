@@ -44,7 +44,11 @@ const columns = [
     {
         id: "execution_status",
         label: "Status",
-        cellAlign: "center",
+        cellAlign: "left",
+        cellStyles: {
+            paddingLeft: "2rem",
+            width: "10%"
+        }
     },
     {
         id: "execution_date",
@@ -53,21 +57,21 @@ const columns = [
     },
 ];
 
-const sampleProjectDropdownData = [
-    "All",
-    "Project1",
-    "Project2",
-    "Project3",
-    "Project4",
-];
+// const sampleProjectDropdownData = [
+//     "All",
+//     "Project1",
+//     "Project2",
+//     "Project3",
+//     "Project4",
+// ];
 
-const releaseDropdown = [
-    "All",
-    "Release1",
-    "Release2",
-    "Release3",
-    "Release4",
-];
+// const releaseDropdown = [
+//     "All",
+//     "Release1",
+//     "Release2",
+//     "Release3",
+//     "Release4",
+// ];
 
 const testingDropdown = [
     "All",
@@ -85,10 +89,12 @@ const TestCaseReport = () => {
     const [startDate, setStartDate] = React.useState(dayjs(new Date()));
     const [endDate, setEndDate] = React.useState(dayjs(new Date()));
     const [projectDropdown, setProjectDropdown] = React.useState(["All"]);
+    const [environmentDropdown, setEnvironmentDropdown] = React.useState(["All"]);
+    const [testingDropdown, setTestingDropdown] = React.useState(["All"]);
     const [testCaseData, setTestCaseData] = React.useState([]);
     const [currentTestCaseData, setCurrentTestCaseData] = React.useState([]);
     const [selectedProject, setSelectedProject] = React.useState("All");
-    const [selectedRelease, setSelectedRelease] = React.useState("All");
+    const [selectedEnvironment, setSelectedEnvironment] = React.useState("All");
     const [selectedTesting, setSelectedTesting] = React.useState("All");
     const [selectedMenuRowIndex, setSelectedMenuRowIndex] = React.useState(null);
     const [selectedTab, setSelectedTab] = React.useState(tabs[0]);
@@ -107,7 +113,7 @@ const TestCaseReport = () => {
     };
 
     React.useEffect(() => {
-        const dropdownAPIURL = "";
+        const dropdownAPIURL = "/sampleProjectData.json";
         fetch(dropdownAPIURL)
             .then(res => res.json())
             .then(jsonData => {
@@ -121,6 +127,37 @@ const TestCaseReport = () => {
                 console.log("Error while fetching dropdown:", err);
             })
 
+        const environmentAPIURL = "/sampleEnvironmentData.json";
+        fetch(environmentAPIURL)
+            .then(res => res.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                if (jsonData) {
+                    const environmentDropdownData = jsonData.map((json) => json.name);
+                    setEnvironmentDropdown([...environmentDropdown, ...environmentDropdownData]);
+                }
+            })
+            .catch(err => {
+                console.log("Error while fetching dropdown:", err);
+            })
+
+        const testingAPIURL = "/sampleEnvironmentData.json";
+        fetch(testingAPIURL)
+            .then(res => res.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                if (jsonData) {
+                    const testingDropdownData = jsonData.map((json) => json.name);
+                    setTestingDropdown([...testingDropdown, ...testingDropdownData]);
+                }
+            })
+            .catch(err => {
+                console.log("Error while fetching dropdown:", err);
+            })
+        // eslint-disable-next-line
+    }, [])
+
+    React.useEffect(() => {
         const testCaseAPIURL = "/sampleTestCaseData.json";
         fetch(testCaseAPIURL)
             .then(res => res.json())
@@ -135,30 +172,44 @@ const TestCaseReport = () => {
                             description: testCase.description,
                             failureReason: testCase.failureReason ? testCase.failureReason.name : null,
                             executionStatus: testCase.executionStatus,
+                            environment: testCase.environment.name,
                             execution_status: (
                                 <>
-                                    {testCase.executionStatus}
-                                    <IconButton
-                                        id="assign-defect-menu-button"
-                                        sx={{ padding: "3px" }}
-                                        onClick={(event) => handleAssignDefectMenuClick(event, index)}
-                                        aria-controls={openAssignDefectMenu ? 'assign-defect-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={openAssignDefectMenu ? 'true' : undefined}
-                                    >
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                    <Menu
-                                        id="assign-defect-menu"
-                                        anchorEl={anchorEl}
-                                        open={openAssignDefectMenu && index === selectedMenuRowIndex}
-                                        onClose={handleClose}
-                                        MenuListProps={{
-                                            'aria-labelledby': 'assign-defect-menu-button',
+                                    <span
+                                        style={{
+                                            color: testCase.executionStatus === "PASSED" ? "green" : "red",
+                                            fontWeight: "600"
                                         }}
                                     >
-                                        <MenuItem onClick={() => handleClose("Assign Defect")}>Assign Defect</MenuItem>
-                                    </Menu>
+                                        {testCase.executionStatus}
+                                    </span>
+                                    {
+                                        testCase.executionStatus === "FAILED" && (
+                                            <>
+                                                <IconButton
+                                                    id="assign-defect-menu-button"
+                                                    sx={{ padding: "3px" }}
+                                                    onClick={(event) => handleAssignDefectMenuClick(event, index)}
+                                                    aria-controls={openAssignDefectMenu ? 'assign-defect-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={openAssignDefectMenu ? 'true' : undefined}
+                                                >
+                                                    <MoreVertIcon />
+                                                </IconButton>
+                                                <Menu
+                                                    id="assign-defect-menu"
+                                                    anchorEl={anchorEl}
+                                                    open={openAssignDefectMenu && index === selectedMenuRowIndex}
+                                                    onClose={handleClose}
+                                                    MenuListProps={{
+                                                        'aria-labelledby': 'assign-defect-menu-button',
+                                                    }}
+                                                >
+                                                    <MenuItem onClick={() => handleClose("Assign Defect")}>Assign Defect</MenuItem>
+                                                </Menu>
+                                            </>
+                                        )
+                                    }
                                 </>
                             ),
                             executionDate: testCase.executionDate,
@@ -208,8 +259,18 @@ const TestCaseReport = () => {
                 setCurrentTestCaseData(filteredData);
             }
         }
-        else if (id === "release") {
-            setSelectedRelease(value);
+        else if (id === "environment") {
+            setSelectedEnvironment(value);
+            if (value === "All") {
+                setCurrentTestCaseData(testCaseData);
+            }
+            else {
+                console.log("267",testCaseData)
+                const filteredData = testCaseData.filter((testCase) => {
+                    return testCase.environment === value
+                });
+                setCurrentTestCaseData(filteredData);
+            }
         }
         else if (id === "testing") {
             setSelectedTesting(value);
@@ -283,12 +344,12 @@ const TestCaseReport = () => {
                             customStyles={dropdownCustomStyles}
                         />
                         <CustomDropdown
-                            label="Release"
-                            placeholder="Select Release"
-                            names={releaseDropdown}
-                            value={selectedRelease}
+                            label="Environment"
+                            placeholder="Select Environment"
+                            names={environmentDropdown}
+                            value={selectedEnvironment}
                             onChange={(value) => {
-                                handleDropdownChange("release", value);
+                                handleDropdownChange("environment", value);
                             }}
                             customStyles={dropdownCustomStyles}
                         />
@@ -347,15 +408,16 @@ const TestCaseReport = () => {
         return (
             <>
                 <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderBottom: "2px solid lightgray"
+                    position: "fixed",
+                    // display: "flex",
+                    // justifyContent: "center",
+                    // alignItems: "center",
+                    // borderBottom: "2px solid lightgray"
                 }}>
                     <CustomDropdown
                         label="Project"
                         placeholder="Select Project"
-                        names={sampleProjectDropdownData}
+                        names={projectDropdown}
                         defaultValue="All"
                         onChange={(value) => {
                             if (value !== "All") {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { PieChart, Pie, Legend, Cell } from 'recharts';
 
 
 const PieChartComponent = (props) => {
@@ -12,13 +12,13 @@ const PieChartComponent = (props) => {
   },[props.data])
 
   return (
-    <PieChart width={500} height={450} style={{ margin: "auto" }}>
+    <PieChart width={500} height={550} style={{ margin: "auto" }}>
       <Pie
         data={pieChartData}
         dataKey="value"
         cx={"50%"}
         cy={"50%"}
-        outerRadius={80}
+        outerRadius={150}
         fill="#8884d8"
         label={(data) => {
           // console.log(data)
