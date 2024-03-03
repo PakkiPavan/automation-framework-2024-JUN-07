@@ -32,7 +32,7 @@
         "failureReason": {
             "name": "SessionNotCreatedException"
         },
-        "executionStatus": "PASSED",
+        "executionStatus": "FAILED",
         "executionDate": "2023-11-01T19:00:11.000+00:00"
     },
     {
@@ -181,6 +181,24 @@
     },
     {
         "project": {
+            "description": "Project3"
+        },
+        "environment": {
+            "name": "Environment3"
+        },
+        "executionType": {
+            "name": "Execution Type3"
+        },
+        "testCaseId": "10001",
+        "description": "Some Test Case Description Some Test Case Description",
+        "failureReason": {
+            "name": "SessionNotCreatedException"
+        },
+        "executionStatus": "PASSED",
+        "executionDate": "2023-11-01T19:00:11.000+00:00"
+    },
+    {
+        "project": {
             "description": "Project4"
         },
         "environment": {
@@ -196,6 +214,41 @@
         },
         "executionStatus": "FAILED",
         "executionDate": "2023-11-01T19:00:11.000+00:00"
+    },
+    {
+        "project": {
+            "description": "Project4"
+        },
+        "environment": {
+            "name": "Environment1"
+        },
+        "executionType": {
+            "name": "Execution Type1"
+        },
+        "testCaseId": "10001",
+        "description": "Some Test Case Description Some Test Case Description",
+        "failureReason": {
+            "name": "SessionNotCreatedException"
+        },
+        "executionStatus": "PASSED",
+        "executionDate": "2023-11-01T19:00:11.000+00:00"
+    },
+    {
+        "project": {
+            "description": "Project4"
+        },
+        "environment": {
+            "name": "Environment1"
+        },
+        "executionType": {
+            "name": "Execution Type1"
+        },
+        "testCaseId": "10001",
+        "description": "Some Test Case Description Some Test Case Description",
+        "failureReason": {
+            "name": "SessionNotCreatedException"
+        },
+        "executionStatus": "PASSED",
+        "executionDate": "2023-11-01T19:00:11.000+00:00"
     }
-    
 ]

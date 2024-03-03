@@ -1,6 +1,6 @@
 import React from "react";
 import "./TestCaseReport.css";
-import { Card, CardContent, IconButton, Menu, MenuItem } from "@mui/material";
+import { Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Menu, MenuItem } from "@mui/material";
 import CustomDropdown from "../Dropdown/CustomDropdown";
 import ReactTable from "../ReactTable/ReactTable";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -31,6 +31,7 @@ const columns = [
         id: "description",
         label: "Description",
         cellAlign: "center",
+        showTooltip: true,
         cellStyles: {
             ...overflowStyles,
             maxWidth: "250px"
@@ -73,12 +74,12 @@ const columns = [
 //     "Release4",
 // ];
 
-const testingDropdown = [
-    "All",
-    "Smoke Testing",
-    "Sanity Testing",
-    "Regression",
-];
+// const testingDropdown = [
+//     "All",
+//     "Smoke Testing",
+//     "Sanity Testing",
+//     "Regression",
+// ];
 
 const tabs = [
     "Test Cases",
@@ -100,6 +101,11 @@ const TestCaseReport = () => {
     const [selectedTab, setSelectedTab] = React.useState(tabs[0]);
     const [pieChartData, setPieChartData] = React.useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [dialog, setDialog] = React.useState({
+        open: false,
+        title: "",
+        content: "",
+    });
     const openAssignDefectMenu = Boolean(anchorEl);
     const handleAssignDefectMenuClick = (event, rowIndex) => {
         setAnchorEl(event.currentTarget);
@@ -117,7 +123,7 @@ const TestCaseReport = () => {
         fetch(dropdownAPIURL)
             .then(res => res.json())
             .then(jsonData => {
-                console.log(jsonData);
+                // console.log(jsonData);
                 if (jsonData) {
                     const projectDropdownData = jsonData.map((json) => json.description);
                     setProjectDropdown([...projectDropdown, ...projectDropdownData]);
@@ -131,7 +137,7 @@ const TestCaseReport = () => {
         fetch(environmentAPIURL)
             .then(res => res.json())
             .then(jsonData => {
-                console.log(jsonData);
+                // console.log(jsonData);
                 if (jsonData) {
                     const environmentDropdownData = jsonData.map((json) => json.name);
                     setEnvironmentDropdown([...environmentDropdown, ...environmentDropdownData]);
@@ -145,7 +151,7 @@ const TestCaseReport = () => {
         fetch(testingAPIURL)
             .then(res => res.json())
             .then(jsonData => {
-                console.log(jsonData);
+                // console.log(jsonData);
                 if (jsonData) {
                     const testingDropdownData = jsonData.map((json) => json.name);
                     setTestingDropdown([...testingDropdown, ...testingDropdownData]);
@@ -162,7 +168,7 @@ const TestCaseReport = () => {
         fetch(testCaseAPIURL)
             .then(res => res.json())
             .then(jsonData => {
-                console.log("API DATA", jsonData);
+                // console.log("API DATA", jsonData);
                 if (jsonData) {
                     const testCaseData = [];
                     jsonData.forEach((testCase, index) => {
@@ -170,7 +176,10 @@ const TestCaseReport = () => {
                             project: testCase.project ? testCase.project.description : null,
                             test_case_id: testCase.testCaseId,
                             description: testCase.description,
-                            failureReason: testCase.failureReason ? testCase.failureReason.name : null,
+                            failureReason: testCase.failureReason ? (
+                                <button className="button-link" onClick={() => showExceptionDialog(testCase.failureReason.name)}>Show Exception</button>
+                            ) : null,
+                            failureReasonText: testCase.failureReason ? testCase.failureReason.name : null,
                             executionStatus: testCase.executionStatus,
                             environment: testCase.environment.name,
                             execution_status: (
@@ -212,6 +221,7 @@ const TestCaseReport = () => {
                                     }
                                 </>
                             ),
+                            execution_statusText: testCase.executionStatus,
                             executionDate: testCase.executionDate,
                             execution_date: getFormattedDate(testCase.executionDate.split(".")[0]),
                         })
@@ -232,18 +242,92 @@ const TestCaseReport = () => {
         // eslint-disable-next-line
     }, [currentTestCaseData])
 
+
+    const showExceptionDialog = (failureReason) => {
+        setDialog({
+            open: true,
+            title: failureReason,
+            content: failureReason,
+        });
+    };
+
+    const handleExceptionDialogClose = () => {
+        setDialog({
+            open: false,
+            title: "",
+            content: "",
+        });
+    };
+
+    const renderDialog = () => {
+        return (
+            <Dialog
+                open={dialog.open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>
+                    {dialog.title}
+                </DialogTitle>
+                <DialogContent dividers>
+                    {dialog.content}
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: "center" }}>
+                    <Button variant="contained" onClick={handleExceptionDialogClose} autoFocus>
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    };
+
+    // const updatePieChartData = () => {
+    //     const passedTestCases = currentTestCaseData.filter((testCase) => {
+    //         return testCase.executionStatus === "PASSED"
+    //     });
+    //     const failedTestCases = currentTestCaseData.filter((testCase) => {
+    //         return testCase.executionStatus === "FAILED"
+    //     });
+    //     const pieChartData = [
+    //         { name: 'Passed', value: passedTestCases.length },
+    //         { name: 'Failed', value: failedTestCases.length },
+    //     ];
+    //     setPieChartData(pieChartData);
+    // };
+
     const updatePieChartData = () => {
-        const passedTestCases = currentTestCaseData.filter((testCase) => {
-            return testCase.executionStatus === "PASSED"
+        console.log("currentTestCaseData", currentTestCaseData)
+        const projectMap = {};
+        const filteredData = currentTestCaseData.filter(item => item.project);
+
+        filteredData.forEach(item => {
+            const projectName = item.project;
+            if (!projectMap[projectName]) {
+                projectMap[projectName] = {
+                    passed: 0,
+                    failed: 0
+                };
+            }
+
+            if (item.executionStatus === 'PASSED') {
+                projectMap[projectName].passed++;
+            } else {
+                projectMap[projectName].failed++;
+            }
         });
-        const failedTestCases = currentTestCaseData.filter((testCase) => {
-            return testCase.executionStatus === "FAILED"
+
+        const chartData = Object.keys(projectMap).map(projectName => {
+            const { passed, failed } = projectMap[projectName];
+            const total = passed + failed;
+            return {
+                name: projectName,
+                passedPercentage: (passed / total) * 100,
+                failedPercentage: (failed / total) * 100
+            };
         });
-        const pieChartData = [
-            { name: 'Passed', value: passedTestCases.length },
-            { name: 'Failed', value: failedTestCases.length },
-        ];
-        setPieChartData(pieChartData);
+        console.log("chartData", chartData)
+        setPieChartData(chartData);
     };
 
     const handleDropdownChange = (id, value) => {
@@ -265,7 +349,6 @@ const TestCaseReport = () => {
                 setCurrentTestCaseData(testCaseData);
             }
             else {
-                console.log("267",testCaseData)
                 const filteredData = testCaseData.filter((testCase) => {
                     return testCase.environment === value
                 });
@@ -414,7 +497,7 @@ const TestCaseReport = () => {
                     // alignItems: "center",
                     // borderBottom: "2px solid lightgray"
                 }}>
-                    <CustomDropdown
+                    {/* <CustomDropdown
                         label="Project"
                         placeholder="Select Project"
                         names={projectDropdown}
@@ -438,7 +521,7 @@ const TestCaseReport = () => {
                             }
                         }}
                         customStyles={dropdownCustomStyles}
-                    />
+                    /> */}
                 </div>
                 <div>
                     <PieChartComponent data={pieChartData} />
@@ -450,6 +533,7 @@ const TestCaseReport = () => {
     return (
         <>
             {renderTabs()}
+            {dialog.open && renderDialog()}
             {selectedTab === tabs[0] && renderTestCases()}
             {selectedTab === tabs[1] && renderTestCaseReport()}
         </>
