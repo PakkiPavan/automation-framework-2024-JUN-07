@@ -1,0 +1,16 @@
+.pie-chart-tooltip {
+    background-color: black;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.pie-chart-tooltip table,
+.pie-chart-tooltip tr,
+.pie-chart-tooltip td {
+    border: 1px solid #fff;
+    border-collapse: collapse;
+}
+
+.pie-chart-tooltip td {
+    padding: 5px;
+}

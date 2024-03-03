@@ -58,6 +58,14 @@ export const getFormattedDayJsDate = (dayJsDate) => {
     return formattedDate;
 };
 
+export const formatNumber = (num, decimals = 2) => {
+    if (num % 1 !== 0) {
+        return num.toFixed(decimals);
+    } else {
+        return num;
+    }
+}
+
 export const overflowStyles = {
     textOverflow: "ellipsis",
     maxWidth: "200px",

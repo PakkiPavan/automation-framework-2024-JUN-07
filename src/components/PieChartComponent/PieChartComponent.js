@@ -1,6 +1,7 @@
 import React from 'react';
-import { PieChart, Pie, Legend, Cell } from 'recharts';
-
+import "./PieChartComponent.css";
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { formatNumber } from "../../Utils";
 
 const PieChartComponent = (props) => {
   // const COLORS = ['green', 'red'];
@@ -11,8 +12,35 @@ const PieChartComponent = (props) => {
     setPieChartData(props.data);
   }, [props.data])
 
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className='pie-chart-tooltip'>
+          <table>
+            <tbody>
+              <tr>
+                <td>Project</td>
+                <td>{payload[0].name}</td>
+              </tr>
+              <tr>
+                <td>Passed</td>
+                <td>{formatNumber(payload[0].payload.passedPercentage)}%</td>
+              </tr>
+              <tr>
+                <td>Failed</td>
+                <td>{formatNumber(payload[0].payload.failedPercentage)}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <PieChart width={1000} height={550} style={{ margin: "auto" }}>
+    <PieChart width={400} height={550} style={{ margin: "auto" }}>
       <Pie
         data={pieChartData}
         // dataKey="value"
@@ -22,12 +50,11 @@ const PieChartComponent = (props) => {
         cy={"50%"}
         outerRadius={150}
         fill="#8884d8"
+        isAnimationActive={false}
         label={(data) => {
           // console.log(data)
           // return `${data.name}-${((data.percent)*100).toFixed(2)}%`;
-          const passedPercentage = data.passedPercentage.toFixed(0);
-          const failedPercentage = data.failedPercentage.toFixed(0);
-          return `${data.name}-${passedPercentage}%,${failedPercentage}%`;
+          return `${data.name}`;
         }}
       >
         {pieChartData.map((entry, index) => (
@@ -35,7 +62,13 @@ const PieChartComponent = (props) => {
           <Cell key={`cell-${index}`} fill={`#${Math.floor(Math.random() * 16777215).toString(16)}`} />
         ))}
       </Pie>
-      <Legend verticalAlign="bottom" height={120} />
+      {/* <Legend verticalAlign="bottom" height={120} /> */}
+      <Tooltip
+        content={<CustomTooltip />}
+        position={{ x: 'coordinate', y: 'coordinate' }}
+        coordinate={{ x: 200, y: 200 }}
+      />
+      {/* <Tooltip /> */}
     </PieChart>
   )
 };
