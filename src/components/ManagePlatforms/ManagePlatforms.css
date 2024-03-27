@@ -1,0 +1,24 @@
+.platforms-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 50%;
+    margin: auto;
+    margin-top: 1rem;
+}
+
+.platforms-container table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.platforms-container tr,
+.platforms-container th,
+.platforms-container td {
+    border: 1px solid lightgray;
+}
+
+.platforms-container td:nth-child(2) {
+    width: 100px;
+    text-align: center;
+}

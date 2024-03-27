@@ -10,6 +10,7 @@ import { defaultDatePickerSlotPropsStyles, defaultDatePickerStyles, getFormatted
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PieChartComponent from "../PieChartComponent/PieChartComponent";
 import { overflowStyles } from "../../Utils";
+import ManagePlatforms from "../ManagePlatforms/ManagePlatforms";
 
 const dropdownCustomStyles = {
     margin: "10px",
@@ -84,6 +85,7 @@ const columns = [
 const tabs = [
     "Test Cases",
     "Test Case Report",
+    "Manage Platforms"
 ];
 
 const TestCaseReport = () => {
@@ -98,7 +100,7 @@ const TestCaseReport = () => {
     const [selectedEnvironment, setSelectedEnvironment] = React.useState("All");
     const [selectedTesting, setSelectedTesting] = React.useState("All");
     const [selectedMenuRowIndex, setSelectedMenuRowIndex] = React.useState(null);
-    const [selectedTab, setSelectedTab] = React.useState(tabs[0]);
+    const [selectedTab, setSelectedTab] = React.useState(tabs[2]);
     // const [pieChartData, setPieChartData] = React.useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [pieChartsData, setPieChartsData] = React.useState([]);
@@ -599,6 +601,7 @@ const TestCaseReport = () => {
             {dialog.open && renderDialog()}
             {selectedTab === tabs[0] && renderTestCases()}
             {selectedTab === tabs[1] && renderTestCaseReport()}
+            {selectedTab === tabs[2] && <ManagePlatforms />}
         </>
     )
 };
