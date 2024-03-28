@@ -5,7 +5,7 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { Button, IconButton } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -65,6 +65,11 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const ManagePlatforms = () => {
     const [platforms, setPlatforms] = React.useState([]);
+    const [showPlatformDialog, setShowPlatformDialog] = React.useState(false);
+    const [showApplicationDialog, setShowApplicationDialog] = React.useState(false);
+    const [platform, setPlatform] = React.useState("");
+    const [application, setApplication] = React.useState("");
+
 
     React.useEffect(() => {
         const dropdownAPIURL = "/samplePlatformsData.json";
@@ -91,8 +96,11 @@ const ManagePlatforms = () => {
     }, [])
 
     const handleManagePlatform = (action, platform) => {
+        console.log("handleManagePlatform", action)
         if (action === "EDIT") {
             // Edit platform
+            setPlatform(platform);
+            setShowPlatformDialog(true);
         }
         else if (action === "DELETE") {
             // Delete platform
@@ -120,8 +128,7 @@ const ManagePlatforms = () => {
                     onClick={(event) => {
                         event.stopPropagation();
                         handleManagePlatform("DELETE", platform)
-                    }
-                    }
+                    }}
                 >
                     <DeleteIcon sx={{
                         color: "red"
@@ -134,6 +141,9 @@ const ManagePlatforms = () => {
     const handleManageApplication = (action, platform, application) => {
         if (action === "EDIT") {
             // Edit application
+            setPlatform(platform);
+            setApplication(application);
+            setShowApplicationDialog(true);
         }
         else if (action === "DELETE") {
             // Delete application
@@ -166,15 +176,135 @@ const ManagePlatforms = () => {
     };
 
     const handleAddPlatform = () => {
-
+        setShowPlatformDialog(true);
     };
 
     const handleAddApplicationToPlatform = (platform) => {
+        setShowApplicationDialog(true);
+        setPlatform(platform);
+    };
 
+    const handleClosePlatformDialog = () => {
+        setShowPlatformDialog(false);
+    };
+
+    const handleSubmitPlatform = () => {
+        handleClosePlatformDialog();
+    }
+
+    const renderPlatformDialog = () => {
+        return (
+            <>
+                <Dialog
+                    open={showPlatformDialog}
+                    onClose={handleClosePlatformDialog}
+                >
+                    <DialogTitle>
+                        Add Platform
+                    </DialogTitle>
+                    <DialogContent
+                        dividers
+                        sx={{
+                            padding: "4rem"
+                        }}
+                    >
+                        <TextField
+                            label="Platform Name"
+                            variant="outlined"
+                            value={platform}
+                            onChange={(event) => setPlatform(event.target.value)}
+                        />
+
+                    </DialogContent>
+                    <DialogActions sx={{ justifyContent: "center" }}>
+                        <Button
+                            autoFocus
+                            variant="outlined"
+                            sx={defaultButtonStyles}
+                            onClick={handleClosePlatformDialog}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            autoFocus
+                            variant="contained"
+                            sx={defaultButtonStyles}
+                            onClick={handleSubmitPlatform}
+                        >
+                            Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
+    };
+
+    const handleCloseApplicationDialog = () => {
+        setShowApplicationDialog(false);
+    };
+
+    const handleSubmitApplication = () => {
+        handleCloseApplicationDialog();
+    };
+
+    const renderApplicationDialog = () => {
+        return (
+            <>
+                <Dialog
+                    open={showApplicationDialog}
+                    onClose={handleCloseApplicationDialog}
+                >
+                    <DialogTitle>
+                        Add Application
+                    </DialogTitle>
+                    <DialogContent
+                        dividers
+                        sx={{
+                            padding: "4rem",
+                            display: "flex",
+                            flexDirection: "column"
+                        }}
+                    >
+                        <div style={{ marginBottom: "1rem" }}>
+                            <b>Platform:</b> {platform}
+                        </div>
+                        <div>
+                            <TextField
+                                label="Application Name"
+                                variant="outlined"
+                                value={application}
+                                onChange={(event) => setApplication(event.target.value)}
+                            />
+                        </div>
+
+                    </DialogContent>
+                    <DialogActions sx={{ justifyContent: "center" }}>
+                        <Button
+                            autoFocus
+                            variant="outlined"
+                            sx={defaultButtonStyles}
+                            onClick={handleCloseApplicationDialog}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            autoFocus
+                            variant="contained"
+                            sx={defaultButtonStyles}
+                            onClick={handleSubmitApplication}
+                        >
+                            Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
     };
 
     return (
         <>
+            {showPlatformDialog && renderPlatformDialog()}
+            {showApplicationDialog && renderApplicationDialog()}
             <div className='platforms-container'>
                 <Button
                     variant='contained' sx={{
@@ -211,6 +341,7 @@ const ManagePlatforms = () => {
                                                 variant='contained' sx={defaultButtonStyles}
                                                 onClick={() => handleAddApplicationToPlatform(platform)}
                                             >
+                                                <AddIcon />
                                                 Add Application
                                             </Button>
                                         </div>
