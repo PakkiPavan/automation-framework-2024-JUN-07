@@ -247,7 +247,7 @@ const TestCaseReport = () => {
     // }, [currentTestCaseData])
 
     const formPieChartsData = (testCaseData) => {
-        console.log("testCaseData", testCaseData);
+        // console.log("testCaseData", testCaseData);
         const allPieChartsData = [];
 
         const allProjectWiseData = testCaseData.reduce((acc, obj) => {
@@ -258,7 +258,7 @@ const TestCaseReport = () => {
             return acc;
         }, {});
 
-        console.log(allProjectWiseData);
+        // console.log(allProjectWiseData);
         for (let currentProject in allProjectWiseData) {
             const currentProjectData = allProjectWiseData[currentProject];
             const passedTestCases = currentProjectData.filter((testCase) => {
@@ -273,7 +273,7 @@ const TestCaseReport = () => {
             ];
             allPieChartsData.push(pieChartData);
         }
-        console.log(allPieChartsData)
+        // console.log(allPieChartsData)
         setPieChartsData(allPieChartsData);
     };
 

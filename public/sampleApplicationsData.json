@@ -1,0 +1,58 @@
+[
+    {
+        "id":1,
+        "name":"Platform-1: Child-1",
+        "platform":{
+            "id":1,
+            "name":"Platform-1"
+        }
+    },
+    {
+        "id":2,
+        "name":"Platform-1: Child-2",
+        "platform":{
+            "id":1,
+            "name":"Platform-1"
+        }
+    },
+    {
+        "id":3,
+        "name":"Platform-1: Child-3",
+        "platform":{
+            "id":1,
+            "name":"Platform-1"
+        }
+    },
+    {
+        "id":4,
+        "name":"Platform-2: Child-1",
+        "platform":{
+            "id":1,
+            "name":"Platform-2"
+        }
+    },
+    {
+        "id":5,
+        "name":"Platform-3: Child-1",
+        "platform":{
+            "id":1,
+            "name":"Platform-3"
+        }
+    },
+    {
+        "id":6,
+        "name":"Platform-3: Child-2",
+        "platform":{
+            "id":1,
+            "name":"Platform-3"
+        }
+    },
+    {
+        "id":8,
+        "name":"Platform-5: Child-1",
+        "platform":{
+            "id":1,
+            "name":"Platform-5"
+        }
+    }
+]

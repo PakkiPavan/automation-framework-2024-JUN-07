@@ -78,32 +78,40 @@ const ManagePlatforms = () => {
         message: ""
     });
 
-    const getPlatforms = () => {
-        const dropdownAPIURL = "/samplePlatformsData.json";
-        fetch(dropdownAPIURL)
-            .then(res => res.json())
-            .then(jsonData => {
-                // console.log(jsonData);
-                if (jsonData) {
-                    const platforms = {};
-                    jsonData.forEach(obj => {
-                        const platformName = `${obj.platform.name}_${obj.platform.id}`;
-                        if (!platforms[platformName]) {
-                            platforms[platformName] = [];
-                        }
-                        platforms[platformName].push(`${obj.name}_${obj.id}`);
-                    });
-                    console.log("platforms", platforms)
-                    setPlatforms(platforms);
-                }
-            })
-            .catch(err => {
-                console.log("Error while fetching platforms:", err);
-            })
+
+    const getPlatforms = async () => {
+        try {
+            const platformsAPIURL = "/samplePlatformsData.json";
+            const platformsResponse = await fetch(platformsAPIURL);
+            const platformsData = await platformsResponse.json();
+            console.log("platformsData", platformsData)
+
+            const applicationsAPIURL = "/sampleApplicationsData.json";
+            const applicationsResponse = await fetch(applicationsAPIURL);
+            const applicationsData = await applicationsResponse.json();
+            console.log("applicationsData", applicationsData)
+            if (platformsData && platformsData.length) {
+                const platforms = {};
+                platformsData.forEach(platform => {
+                    const platformName = `${platform.name}_${platform.id}`;
+                    const childrenArr = applicationsData.filter(item => item.platform && item.platform.name === platform.name)
+                    const children = childrenArr.map(item => `${item.name}_${item.id}`);
+                    platforms[platformName] = children;
+                });
+                console.log("platforms", platforms);
+                setPlatforms(platforms);
+            }
+        }
+        catch (err) {
+            console.log("Error while fetching platforms:", err);
+        }
     };
 
     React.useEffect(() => {
-        getPlatforms();
+        const fetchPlatforms = async () => {
+            await getPlatforms();
+        };
+        fetchPlatforms();
     }, [])
 
     const handleManagePlatform = async (action, platform) => {
@@ -509,7 +517,15 @@ const ManagePlatforms = () => {
                                                         })}
                                                     </tbody>
                                                 </table>
-                                            ) : "No Application Found"
+                                            ) : (
+                                                <div style={{
+                                                    textAlign: "center",
+                                                    border: "1px solid",
+                                                    padding: "2rem",
+                                                }}>
+                                                    No Application Found
+                                                </div>
+                                            )
                                         }
                                     </AccordionDetails>
                                 </Accordion>
