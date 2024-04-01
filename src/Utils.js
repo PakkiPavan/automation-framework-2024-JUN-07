@@ -72,3 +72,23 @@ export const overflowStyles = {
     overflow: "hidden",
     whiteSpace: "nowrap",
 }
+
+export const getName = (str) => {
+    let lastIndex = str.lastIndexOf("_");
+    let result = str.substring(0, lastIndex);
+    return result;
+}
+
+export const getId = (str) => {
+    let lastIndex = str.lastIndexOf("_");
+    let result = str.substring(lastIndex + 1);
+    return result ? Number(result) : result;
+}
+
+export const isNullOrEmpty = (value) => {
+    if (!value || value.trim() === "") {
+        return true;
+    }
+
+    return false;
+}

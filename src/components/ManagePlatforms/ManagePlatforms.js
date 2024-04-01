@@ -5,10 +5,11 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Snackbar, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { getId, getName, isNullOrEmpty } from '../../Utils';
 
 const defaultButtonStyles = {
     padding: "3px",
@@ -64,27 +65,33 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 
 const ManagePlatforms = () => {
-    const [platforms, setPlatforms] = React.useState([]);
+    const [platforms, setPlatforms] = React.useState({});
     const [showPlatformDialog, setShowPlatformDialog] = React.useState(false);
     const [showApplicationDialog, setShowApplicationDialog] = React.useState(false);
     const [platform, setPlatform] = React.useState("");
     const [application, setApplication] = React.useState("");
+    const [fieldError, setFieldError] = React.useState(false);
+    const [isEditMode, setIsEditMode] = React.useState(false);
+    const [recordToEdit, setRecordToEdit] = React.useState(null);
+    const [showAlert, setShowAlert] = React.useState({
+        open: false,
+        message: ""
+    });
 
-
-    React.useEffect(() => {
+    const getPlatforms = () => {
         const dropdownAPIURL = "/samplePlatformsData.json";
         fetch(dropdownAPIURL)
             .then(res => res.json())
             .then(jsonData => {
                 // console.log(jsonData);
                 if (jsonData) {
-                    const platforms = [];
+                    const platforms = {};
                     jsonData.forEach(obj => {
-                        const platformName = obj.platform.name;
+                        const platformName = `${obj.platform.name}_${obj.platform.id}`;
                         if (!platforms[platformName]) {
                             platforms[platformName] = [];
                         }
-                        platforms[platformName].push(obj.name);
+                        platforms[platformName].push(`${obj.name}_${obj.id}`);
                     });
                     console.log("platforms", platforms)
                     setPlatforms(platforms);
@@ -93,13 +100,20 @@ const ManagePlatforms = () => {
             .catch(err => {
                 console.log("Error while fetching platforms:", err);
             })
+    };
+
+    React.useEffect(() => {
+        getPlatforms();
     }, [])
 
-    const handleManagePlatform = (action, platform) => {
+    const handleManagePlatform = async (action, platform) => {
         console.log("handleManagePlatform", action)
         if (action === "EDIT") {
             // Edit platform
-            setPlatform(platform);
+            const platformName = getName(platform);
+            setPlatform(platformName);
+            setRecordToEdit(platform);
+            setIsEditMode(true);
             setShowPlatformDialog(true);
         }
         else if (action === "DELETE") {
@@ -119,7 +133,7 @@ const ManagePlatforms = () => {
                     }}
                 >
                     <EditIcon sx={{
-                        color: "blue"
+                        color: "#1565c0"
                     }} />
                 </IconButton>
                 <IconButton
@@ -142,7 +156,13 @@ const ManagePlatforms = () => {
         if (action === "EDIT") {
             // Edit application
             setPlatform(platform);
-            setApplication(application);
+            setRecordToEdit({
+                platform,
+                application,
+            });
+            setIsEditMode(true);
+            const applicationName = getName(application);
+            setApplication(applicationName);
             setShowApplicationDialog(true);
         }
         else if (action === "DELETE") {
@@ -159,7 +179,7 @@ const ManagePlatforms = () => {
                     onClick={() => handleManageApplication("EDIT", platform, application)}
                 >
                     <EditIcon sx={{
-                        color: "blue"
+                        color: "#1565c0"
                     }} />
                 </IconButton>
                 <IconButton
@@ -176,20 +196,59 @@ const ManagePlatforms = () => {
     };
 
     const handleAddPlatform = () => {
+        setPlatform("");
         setShowPlatformDialog(true);
     };
 
     const handleAddApplicationToPlatform = (platform) => {
+        setApplication("");
         setShowApplicationDialog(true);
         setPlatform(platform);
     };
 
     const handleClosePlatformDialog = () => {
         setShowPlatformDialog(false);
+        setFieldError(false);
+        setIsEditMode(false);
     };
 
-    const handleSubmitPlatform = () => {
-        handleClosePlatformDialog();
+    const handleSubmitPlatform = async () => {
+        console.log("handleSubmitPlatform", platform);
+
+        if (isNullOrEmpty(platform)) {
+            setFieldError(true);
+            return;
+        }
+        setFieldError(false);
+
+        try {
+            const API_URL = "http://10.103.50.166:8090/api/platforms";
+            const body = {
+                id: isEditMode ? getId(recordToEdit) : Object.keys(platforms).length + 1,
+                name: platform
+            };
+            const addPlatformResponse = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            const data = await addPlatformResponse.json();
+            console.log("ADD PLAFORM RESPONSE", data);
+            setShowAlert({
+                open: true,
+                message: `Platform ${isEditMode ? "updated" : "added"} successfully!`,
+                severity: "success"
+            });
+        }
+        catch (err) {
+            console.log(`Failed to ${isEditMode ? "update" : "add"} platform:`, err);
+        }
+        finally {
+            handleClosePlatformDialog();
+            getPlatforms();
+        }
     }
 
     const renderPlatformDialog = () => {
@@ -209,10 +268,16 @@ const ManagePlatforms = () => {
                         }}
                     >
                         <TextField
+                            id="platformName"
                             label="Platform Name"
                             variant="outlined"
                             value={platform}
                             onChange={(event) => setPlatform(event.target.value)}
+                            sx={{
+                                ".MuiOutlinedInput-notchedOutline": {
+                                    borderColor: fieldError ? `red` : "initial"
+                                }
+                            }}
                         />
 
                     </DialogContent>
@@ -231,7 +296,7 @@ const ManagePlatforms = () => {
                             sx={defaultButtonStyles}
                             onClick={handleSubmitPlatform}
                         >
-                            Submit
+                            {isEditMode ? "Update" : "Submit"}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -241,10 +306,51 @@ const ManagePlatforms = () => {
 
     const handleCloseApplicationDialog = () => {
         setShowApplicationDialog(false);
+        setFieldError(false);
+        setIsEditMode(false);
     };
 
-    const handleSubmitApplication = () => {
-        handleCloseApplicationDialog();
+    const handleSubmitApplication = async () => {
+        console.log("handleSubmitApplication", platform, application);
+        if (isNullOrEmpty(application)) {
+            setFieldError(true);
+            return;
+        }
+        setFieldError(false);
+
+        try {
+            const API_URL = "http://10.103.50.166:8090/api/applications";
+            const body = {
+                id: isEditMode ? getId(recordToEdit.application) : platforms[platform].length + 1,
+                name: application,
+                platform: {
+                    id: getId(platform),
+                    name: getName(platform)
+                }
+            };
+            console.log("ADD APPLICAITON BODY", body);
+            const addApplicationResponse = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            const data = await addApplicationResponse.json();
+            console.log("ADD APPLICATION RESPONSE", data);
+            setShowAlert({
+                open: true,
+                message: `Application ${isEditMode ? "updated" : "added"} successfully!`,
+                severity: "success"
+            });
+        }
+        catch (err) {
+            console.log(`Failed to ${isEditMode ? "update" : "add"} application to platform:`, err);
+        }
+        finally {
+            handleCloseApplicationDialog();
+            getPlatforms();
+        }
     };
 
     const renderApplicationDialog = () => {
@@ -266,14 +372,20 @@ const ManagePlatforms = () => {
                         }}
                     >
                         <div style={{ marginBottom: "1rem" }}>
-                            <b>Platform:</b> {platform}
+                            <b>Platform:</b> {getName(platform)}
                         </div>
                         <div>
                             <TextField
+                                id="applicationName"
                                 label="Application Name"
                                 variant="outlined"
                                 value={application}
                                 onChange={(event) => setApplication(event.target.value)}
+                                sx={{
+                                    ".MuiOutlinedInput-notchedOutline": {
+                                        borderColor: fieldError ? `red` : "initial"
+                                    }
+                                }}
                             />
                         </div>
 
@@ -293,7 +405,7 @@ const ManagePlatforms = () => {
                             sx={defaultButtonStyles}
                             onClick={handleSubmitApplication}
                         >
-                            Submit
+                            {isEditMode ? 'Update' : 'Submit'}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -301,10 +413,42 @@ const ManagePlatforms = () => {
         )
     };
 
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setShowAlert({
+            open: false,
+            message: ""
+        });
+    };
+
+    const renderAlert = () => {
+        return (
+            <Snackbar
+                open={showAlert.open}
+                autoHideDuration={6000}
+                onClose={handleCloseAlert}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert
+                    onClose={handleCloseAlert}
+                    severity={showAlert.severity ? showAlert.severity : "info"}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {showAlert.message}
+                </Alert>
+            </Snackbar>
+        )
+    }
+
     return (
         <>
             {showPlatformDialog && renderPlatformDialog()}
             {showApplicationDialog && renderApplicationDialog()}
+            {renderAlert()}
             <div className='platforms-container'>
                 <Button
                     variant='contained' sx={{
@@ -326,7 +470,7 @@ const ManagePlatforms = () => {
                                 <Accordion>
                                     <AccordionSummary>
                                         <div>
-                                            {platform}
+                                            {getName(platform)}
                                         </div>
                                         <div>
                                             {renderPlatformActions(platform)}
@@ -354,14 +498,16 @@ const ManagePlatforms = () => {
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
-                                                    {applications.map((application, index2) => {
-                                                        return (
-                                                            <tr key={`platform-application-${index1}${index2}`}>
-                                                                <td>{application}</td>
-                                                                <td>{renderApplicationActions(platform, application)}</td>
-                                                            </tr>
-                                                        )
-                                                    })}
+                                                    <tbody>
+                                                        {applications.map((application, index2) => {
+                                                            return (
+                                                                <tr key={`platform-application-${index1}${index2}`}>
+                                                                    <td>{getName(application)}</td>
+                                                                    <td>{renderApplicationActions(platform, application)}</td>
+                                                                </tr>
+                                                            )
+                                                        })}
+                                                    </tbody>
                                                 </table>
                                             ) : "No Application Found"
                                         }
